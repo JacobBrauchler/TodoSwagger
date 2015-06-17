@@ -1,1 +1,1 @@
-# TodoSwagger
+# Skeleton project for Swagger
