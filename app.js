@@ -3,6 +3,7 @@
  */
 
 var express = require('express'),
+    cores = require('cores')
 	routes = require('./routes'),
 	http = require('http'),
 	tasks = require('./routes/tasks'),
@@ -29,12 +30,31 @@ var app = express();
 			app.use(express.json());
 			
 		});
+	app.all('/', function(req, res, next) {
+  		res.header("Access-Control-Allow-Origin", "*");
+  		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  		next();
+		});
+
 		
 
 		app.get('/', routes.index);
 		app.get('/tasks', tasks.index);
 		app.get('/tasks/:id', tasks.show);
-		//app.get('/tasks/tasks?', tasks.search);
+		app.get('/search', function(req, res, next) {
+  			var query = req.query
+  			//res.send(query['name']);
+  			Task.findOne({name: query['name']}, function(err, doc) {
+    			if(!err && doc) {
+      				res.json(200, doc);
+    			} else if(err) {
+      				res.json(500, { message: "Error loading task." + err});
+    			} else {
+      				res.json(404, { message: "Task not found."});
+    			}
+    		});
+  			//res.end(JSON.stringify(query));
+  		});
 		app.get('/tasks/:name', tasks.findByName);
 
 

@@ -3,7 +3,7 @@ var Task = require('../models/task').Task;
 /*
  * Tasks Routes
  */
-exports.index = function(req, res) {
+exports.index = function(req, res, next) {
   Task.find({}, function(err, docs) {
     if(!err) {
       res.json(200, { tasks: docs });  
