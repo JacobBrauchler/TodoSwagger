@@ -13,6 +13,7 @@ schemes:
   - https
 consumes:
   - application/json
+  - application/x-www-form-urlencoded
 produces:
   - application/x-www-form-urlencoded
 basePath: /
@@ -65,17 +66,14 @@ paths:
       parameters:
         # An example parameter that is in query and is required
         -
-          name: name 
-          in: query
-          description: unique object task name
+          name: body
+          in: body
+          description: The name and description of your new task
           required: true
-          type: string
-        - name: description
-          in: query
-          description: task description
-          required: true
-          type: string
-     
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/task'
       responses:
         # Response code
         200: 
@@ -100,25 +98,14 @@ paths:
       parameters:
         # An example parameter that is in query and is required
         -
-          name: id 
-          in: query
-          description: unique object id
+          name: body 
+          in: body
+          description: unique object id, task name and description
           required: true
-          type: string
-          
-        -
-          name: name
-          in: query
-          description: unique task name
-          required: true
-          type: string
-        -
-          name: description
-          in: query
-          description: description of the task
-          required: true
-          type: string
-      
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/task'
       responses:
         # Response code
         200:
@@ -143,11 +130,14 @@ paths:
       parameters:
         # An example parameter that is in query and is required
         -
-          name: id 
-          in: query
+          name: body 
+          in: body
           description: unique object id
           required: true
-          type: string
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/task'
       
       responses:
         # Response code
@@ -167,7 +157,7 @@ paths:
   
   
 
-  /tasks/id:
+  /tasks/{id}:
     get:
     
       description: |
@@ -178,7 +168,7 @@ paths:
         # An example parameter that is in query and is required
         -
           name: id
-          in: query
+          in: path
           description: unique object id
           required: true
           type: string
@@ -259,4 +249,14 @@ paths:
             type: string
             example: "Cannot find Task"                
   
-
+definitions:
+  task:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      date_created:
+        type: string
